@@ -9,6 +9,7 @@
 <body>
   <div class="noise"></div>
   <div class="scanlines"></div>
+<div class="lensRipple" id="lens"></div>
 
   <header class="topbar">
     <div class="brand">
@@ -132,6 +133,41 @@
         </div>
       </div>
     </section>
+    
+<section class="card" id="birthday">
+  <div class="cardHead">
+    <div>
+      <h2>Birthday → Miller Age</h2>
+      <p>Enter your birthday. Watch your age on Miller’s planet tick in real time (down to the second).</p>
+    </div>
+    <div class="pill mono">live</div>
+  </div>
+
+  <div class="bdayGrid">
+    <div class="bdayBlock">
+      <div class="label">Your birthday</div>
+      <div class="bdayRow">
+        <input id="bdayInput" type="datetime-local" />
+        <button class="btn ghost" id="bdayNow">Use now</button>
+      </div>
+      <p class="hint muted" style="margin:10px 0 0">
+        Tip: choose your exact birth time if you know it. If not, pick 12:00.
+      </p>
+    </div>
+
+    <div class="bdayBlock">
+      <div class="label">Your age on Earth</div>
+      <div class="big mono" id="earthAge">—</div>
+      <div class="small mono muted" id="earthAgeFine">—</div>
+    </div>
+
+    <div class="bdayBlock">
+      <div class="label">Your age on Miller’s planet</div>
+      <div class="big mono" id="millerAge">—</div>
+      <div class="small mono muted" id="millerAgeFine">—</div>
+    </div>
+  </div>
+</section>
 
     <!-- ABOUT -->
     <section class="card" id="about">
