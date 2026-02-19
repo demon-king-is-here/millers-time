@@ -21,22 +21,47 @@ body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   color:var(--text);
+
   background:
-    radial-gradient(900px 600px at 15% 0%, rgba(124,58,237,.22), transparent 62%),
-    radial-gradient(900px 600px at 88% 10%, rgba(16,185,129,.18), transparent 60%),
-    radial-gradient(1200px 700px at 50% 120%, rgba(6,182,212,.10), transparent 55%),
-    linear-gradient(180deg, var(--bg1), var(--bg0));
+    radial-gradient(1200px 700px at 20% -10%, rgba(0,130,255,.25), transparent 60%),
+    radial-gradient(1000px 600px at 90% 10%, rgba(0,60,180,.25), transparent 60%),
+    radial-gradient(800px 600px at 50% 120%, rgba(0,30,90,.35), transparent 70%),
+    linear-gradient(180deg, #020611 0%, #040b1c 40%, #030916 100%);
+
   overflow-x:hidden;
 }
 
 /* film grain + scanlines */
 .noise{
-  position:fixed; inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
-  opacity:.09;
+ /* Star field (animated drift) */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-30%;
+  background:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.85), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,.70), transparent),
+    radial-gradient(1.5px 1.5px at 40% 60%, rgba(255,255,255,.55), transparent),
+    radial-gradient(1px 1px at 80% 20%, rgba(255,255,255,.70), transparent),
+    radial-gradient(2px 2px at 10% 75%, rgba(255,255,255,.80), transparent),
+    radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,.55), transparent),
+    radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,.55), transparent),
+    radial-gradient(2px 2px at 92% 55%, rgba(255,255,255,.75), transparent);
+  background-repeat: repeat;
+  background-size: 650px 650px;
+  opacity:.38;
   pointer-events:none;
-  z-index:1;
+  z-index:0;
+  animation: starDrift 90s linear infinite;
+  will-change: transform;
+}
+
+@keyframes starDrift{
+  0%   { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(120px, 80px, 0); }
+}
+
+
 }
 .scanlines{
   position:fixed; inset:0;
@@ -50,6 +75,54 @@ body{
   opacity:.08;
   pointer-events:none;
   z-index:2;
+}
+/* Gravitational lens ripple overlay */
+.lensRipple{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:4;
+  opacity:0;
+}
+
+.lensRipple::before{
+  content:"";
+  position:absolute;
+  left: var(--rx, 50%);
+  top:  var(--ry, 50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  transform: translate(-50%,-50%) scale(1);
+  background:
+    radial-gradient(circle,
+      rgba(150,220,255,.25) 0%,
+      rgba(60,160,255,.18) 18%,
+      rgba(0,0,0,0) 55%);
+  filter: blur(0px);
+  box-shadow:
+    0 0 18px rgba(0,140,255,.25),
+    0 0 40px rgba(0,90,255,.18);
+}
+
+.lensRipple.rippling{
+  opacity:1;
+  animation: lensFade .55s ease-out forwards;
+}
+
+.lensRipple.rippling::before{
+  animation: lensExpand .55s ease-out forwards;
+}
+
+@keyframes lensExpand{
+  0%   { transform: translate(-50%,-50%) scale(0.7); filter: blur(0px); opacity:1; }
+  60%  { transform: translate(-50%,-50%) scale(24);  filter: blur(1.4px); opacity:.9; }
+  100% { transform: translate(-50%,-50%) scale(34);  filter: blur(2.2px); opacity:0; }
+}
+
+@keyframes lensFade{
+  0% { opacity:1; }
+  100% { opacity:0; }
 }
 
 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
@@ -201,9 +274,10 @@ body{
   position:absolute; inset:0;
   border-radius:999px;
   background:
-    radial-gradient(closest-side at 35% 35%, rgba(255,255,255,.24), transparent 62%),
-    radial-gradient(closest-side at 70% 65%, rgba(16,185,129,.18), transparent 64%),
-    radial-gradient(closest-side, rgba(124,58,237,.22), rgba(0,0,0,.60));
+  radial-gradient(closest-side at 35% 35%, rgba(255,255,255,.35), transparent 62%),
+  radial-gradient(closest-side at 70% 65%, rgba(0,140,255,.22), transparent 64%),
+  radial-gradient(closest-side, rgba(0,60,180,.35), rgba(0,0,0,.75));
+
   border:1px solid rgba(255,255,255,.14);
 }
 .orbRing, .orbRing2{
@@ -274,6 +348,41 @@ body{
   height:fit-content;
 }
 
+.bdayGrid{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap:12px;
+}
+
+.bdayBlock{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.30);
+  border-radius:16px;
+  padding:12px;
+}
+
+.bdayRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+#bdayInput{
+  flex: 1;
+  min-width: 220px;
+  padding:10px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.25);
+  color: rgba(255,255,255,.9);
+}
+
+@media (max-width: 980px){
+  .bdayGrid{ grid-template-columns: 1fr; }
+}
+
 .task-grid{
   display:grid;
   grid-template-columns: repeat(3, minmax(0,1fr));
@@ -332,7 +441,14 @@ input[type="range"]{width:100%}
 .fill{
   height:100%;
   width:0%;
-  background: linear-gradient(90deg, rgba(124,58,237,.95), rgba(16,185,129,.75), rgba(6,182,212,.75));
+  background: linear-gradient(
+  90deg,
+  rgba(0,90,255,.95),
+  rgba(0,180,255,.75),
+  rgba(120,220,255,.85)
+);
+box-shadow: 0 0 20px rgba(0,120,255,.45);
+
   box-shadow: 0 0 18px rgba(124,58,237,.35);
   transition: width .18s ease;
 }
