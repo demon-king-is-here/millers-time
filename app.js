@@ -1,5 +1,22 @@
 const $ = (id) => document.getElementById(id);
 
+function lensRippleAt(element){
+  const lens = $("lens");
+  if (!lens || !element) return;
+
+  const r = element.getBoundingClientRect();
+  const x = r.left + r.width * 0.5;
+  const y = r.top + r.height * 0.5;
+
+  lens.style.setProperty("--rx", x + "px");
+  lens.style.setProperty("--ry", y + "px");
+
+  lens.classList.remove("rippling");
+  // reflow to restart animation
+  void lens.offsetWidth;
+  lens.classList.add("rippling");
+}
+
 // Movie ratio: 1 Miller hour = 7 Earth years
 const EARTH_YEARS_PER_MILLER_HOUR = 7;
 const SECONDS_PER_YEAR = 365.2425 * 24 * 60 * 60;
@@ -111,6 +128,73 @@ function startClocks(){
   }, 250);
 }
 
+function fmtHMS(totalSeconds){
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const days = Math.floor(s / 86400);
+  const remD = s - days * 86400;
+  const h = Math.floor(remD / 3600);
+  const remH = remD - h * 3600;
+  const m = Math.floor(remH / 60);
+  const sec = remH - m * 60;
+  return { days, h, m, sec };
+}
+
+function formatEarthAge(sec){
+  const b = breakdownEarth(sec);
+  return {
+    big: `${b.years}y ${b.days}d`,
+    fine: `${b.years}y ${b.days}d ${pad2(b.hours)}:${pad2(b.mins)}:${pad2(b.s)} (Earth)`
+  };
+}
+
+function formatMillerAgeFromEarthSeconds(earthSec){
+  // Convert Earth seconds lived -> Miller seconds lived
+  const millerSec = earthSec / EARTH_SECONDS_PER_MILLER_SECOND;
+
+  const years = Math.floor(millerSec / SECONDS_PER_YEAR); // "Miller-years" using Earth-year length for display
+  const remY = millerSec - years * SECONDS_PER_YEAR;
+
+  const { days, h, m, sec } = fmtHMS(remY);
+
+  return {
+    big: `${years}y ${days}d`,
+    fine: `${years}y ${days}d ${pad2(h)}:${pad2(m)}:${pad2(sec)} (Miller)`
+  };
+}
+
+let bdayTimer = null;
+
+function startBirthdayClock(){
+  const input = $("bdayInput");
+  if (!input) return;
+
+  const v = input.value;
+  if (!v) return;
+
+  // datetime-local returns local time; treat it as local
+  const birthMs = new Date(v).getTime();
+  if (!Number.isFinite(birthMs)) return;
+
+  clearInterval(bdayTimer);
+
+  const tick = () => {
+    const nowMs = Date.now();
+    let earthSec = (nowMs - birthMs) / 1000;
+    if (earthSec < 0) earthSec = 0;
+
+    const e = formatEarthAge(earthSec);
+    $("earthAge").textContent = e.big;
+    $("earthAgeFine").textContent = e.fine;
+
+    const m = formatMillerAgeFromEarthSeconds(earthSec);
+    $("millerAge").textContent = m.big;
+    $("millerAgeFine").textContent = m.fine;
+  };
+
+  tick();
+  bdayTimer = setInterval(tick, 250); // updates multiple times per sec; display is per-second
+}
+
 function init(){
   renderTasks();
 
@@ -118,11 +202,28 @@ function init(){
     $("minsOut").textContent = $("mins").value;
     renderCustomResult();
   });
-  $("simHours").addEventListener("input", renderSim);
+  $("simHours").addEventListener("input", (e) => {
+  renderSim();
+  lensRippleAt(e.target);
+});
 
   $("minsOut").textContent = $("mins").value;
   renderCustomResult();
   renderSim();
+  // Birthday module
+$("bdayInput")?.addEventListener("input", () => {
+  startBirthdayClock();
+});
+
+$("bdayNow")?.addEventListener("click", () => {
+  const input = $("bdayInput");
+  if (!input) return;
+  const now = new Date();
+  // set datetime-local value: YYYY-MM-DDTHH:MM
+  const iso = new Date(now.getTime() - now.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  input.value = iso;
+  startBirthdayClock();
+});
   startClocks();
 }
 
