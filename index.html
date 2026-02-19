@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Miller’s Planet Time — Interstellar Dilation</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="scanlines"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logoMark"></div>
+      <div>
+        <div class="brandName">MILLER / EARTH</div>
+        <div class="brandSub">time dilation console</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="#tasks">Tasks</a>
+      <a href="#sim">Simulator</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <div class="status">
+      <span class="dot"></span>
+      <span>LIVE DILATION</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="heroGlow"></div>
+      <div class="heroGrid"></div>
+
+      <div class="heroContent">
+        <h1>Time is a weapon here.</h1>
+        <p class="subtitle">
+          On Miller’s planet, <b>1 hour ≈ 7 Earth years</b>.  
+          Do something small… and watch Earth disappear.
+        </p>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="k">Earth elapsed</div>
+            <div class="v" id="earthNow">—</div>
+          </div>
+          <div class="kpi">
+            <div class="k">Miller elapsed</div>
+            <div class="v" id="millerNow">—</div>
+          </div>
+          <div class="kpi">
+            <div class="k">Ratio</div>
+            <div class="v mono">1h : 7y</div>
+          </div>
+        </div>
+
+        <div class="heroActions">
+          <a class="btn primary" href="#tasks">Start a task</a>
+          <a class="btn ghost" href="#sim">Run simulator</a>
+        </div>
+      </div>
+
+      <div class="heroArt">
+        <div class="orb">
+          <div class="orbInner"></div>
+          <div class="orbRing"></div>
+          <div class="orbRing2"></div>
+        </div>
+
+        <div class="hud">
+          <div class="hudTitle">GARGANTUA FIELD READOUT</div>
+          <div class="hudRow"><span>Relativistic shear</span><span class="mono">0.992</span></div>
+          <div class="hudRow"><span>Temporal drift</span><span class="mono">+700%</span></div>
+          <div class="hudRow"><span>Water wall probability</span><span class="mono">high</span></div>
+          <div class="hudRow"><span>Vibe</span><span class="mono">bad</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section class="card" id="tasks">
+      <div class="cardHead">
+        <div>
+          <h2>Task Converter</h2>
+          <p>Pick a task length on Miller’s planet and see what passes on Earth.</p>
+        </div>
+        <div class="pill mono">interactive</div>
+      </div>
+
+      <div class="task-grid" id="taskGrid"></div>
+
+      <div class="custom">
+        <div class="customTop">
+          <div class="label">Custom task length</div>
+          <div class="chip"><span id="minsOut">10</span> min on Miller</div>
+        </div>
+
+        <input id="mins" type="range" min="1" max="180" value="10" />
+
+        <div class="result">
+          <div class="big" id="earthResult">—</div>
+          <div class="small mono" id="earthBreakdown">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIM -->
+    <section class="card" id="sim">
+      <div class="cardHead">
+        <div>
+          <h2>Simulator</h2>
+          <p>Slide time spent on Miller’s planet. Watch Earth years accelerate.</p>
+        </div>
+        <div class="pill mono">0 → 6 hours</div>
+      </div>
+
+      <div class="simRow">
+        <input id="simHours" type="range" min="0" max="6" step="0.05" value="0" />
+        <div class="chip"><span id="simOut">0.00</span> hr</div>
+      </div>
+
+      <div class="timeline">
+        <div class="bar"><div class="fill" id="fill"></div></div>
+        <div class="timeline-row">
+          <div class="pill">Miller: <span class="mono" id="millerSim">0h 0m</span></div>
+          <div class="pill">Earth: <span class="mono" id="earthSim">0y 0d</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="card" id="about">
+      <div class="cardHead">
+        <div>
+          <h2>About</h2>
+          <p>Movie ratio demo for intuition & vibes. Not a GR calculator.</p>
+        </div>
+        <div class="pill mono">v1</div>
+      </div>
+
+      <div class="aboutGrid">
+        <div class="aboutBlock">
+          <div class="aboutK">Why this exists</div>
+          <div class="aboutV">To make time dilation feel personal. Minutes become decades.</div>
+        </div>
+        <div class="aboutBlock">
+          <div class="aboutK">What’s next</div>
+          <div class="aboutV">Better animations, cosmic timeline, and shareable “time crimes”.</div>
+        </div>
+        <div class="aboutBlock">
+          <div class="aboutK">Warning</div>
+          <div class="aboutV">If you stay too long… your friends are basically fossils.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="mono">MILLER / EARTH • DILATION CONSOLE</div>
+      <div class="muted">Built for a full UI experience. Sharper, darker, cinematic.</div>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
