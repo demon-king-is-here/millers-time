@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://demon-king-is-here.github.io/millers-time/sitemap.xml
