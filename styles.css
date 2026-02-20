@@ -61,7 +61,6 @@ body::before{
   100% { transform: translate3d(120px, 80px, 0); }
 }
 
-
 }
 .scanlines{
   position:fixed; inset:0;
@@ -379,8 +378,146 @@ body::before{
   color: rgba(255,255,255,.9);
 }
 
+
 @media (max-width: 980px){
   .bdayGrid{ grid-template-columns: 1fr; }
+}
+
+.funGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+.funBlock{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.30);
+  border-radius:16px;
+  padding:12px;
+}
+
+.funRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+#eventSelect{
+  flex:1;
+  min-width: 220px;
+  padding:10px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.25);
+  color: rgba(255,255,255,.9);
+}
+
+.miniStats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.mini{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.25);
+  border-radius:14px;
+  padding:10px;
+}
+.mini .k{font-size:11px; color:rgba(255,255,255,.62); margin-bottom:6px}
+.mini .v{font-size:14px; font-weight:900}
+
+.playRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.flyStage{
+  margin-top:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  border-radius:16px;
+  padding:12px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* fun “streaks” background */
+.flyStage::before{
+  content:"";
+  position:absolute; inset:-40px;
+  background:
+    repeating-linear-gradient(120deg,
+      rgba(120,220,255,.10) 0px,
+      rgba(120,220,255,.10) 2px,
+      transparent 2px,
+      transparent 10px);
+  opacity:.25;
+  transform: translateX(-40px);
+  animation: streak 6s linear infinite;
+  pointer-events:none;
+}
+@keyframes streak{
+  0%{ transform: translateX(-40px); }
+  100%{ transform: translateX(40px); }
+}
+
+.yearCard{
+  position:relative;
+  z-index:1;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.28);
+  border-radius:16px;
+  padding:12px;
+}
+.yearLabel{
+  font-size:10px;
+  letter-spacing:1px;
+  color:rgba(255,255,255,.62);
+  margin-bottom:8px;
+}
+.yearBig{
+  font-size:42px;
+  font-weight:950;
+  line-height:1;
+}
+.yearSub{
+  margin-top:8px;
+  color:rgba(255,255,255,.65);
+  font-size:12px;
+}
+
+.meter{
+  margin-top:12px;
+  height:12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.30);
+  overflow:hidden;
+  position:relative;
+  z-index:1;
+}
+.meterFill{
+  height:100%;
+  width:0%;
+  background: linear-gradient(90deg, rgba(0,90,255,.95), rgba(0,180,255,.75), rgba(120,220,255,.85));
+  box-shadow: 0 0 20px rgba(0,120,255,.35);
+  transition: width .1s linear;
+}
+.caption{
+  position:relative;
+  z-index:1;
+  margin-top:10px;
+  font-size:13px;
+  color:rgba(255,255,255,.75);
+}
+
+@media (max-width: 980px){
+  .funGrid{ grid-template-columns:1fr; }
+  .miniStats{ grid-template-columns:1fr; }
 }
 
 .task-grid{
@@ -487,4 +624,83 @@ box-shadow: 0 0 20px rgba(0,120,255,.45);
   .task-grid{grid-template-columns:1fr}
   .aboutGrid{grid-template-columns:1fr}
   .nav{display:none}
+}
+#eventSelect{
+  flex:1;
+  min-width: 220px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.85);
+  color: rgba(255,255,255,.92);
+  font-weight:600;
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  cursor:pointer;
+}
+
+/* Dropdown options styling */
+#eventSelect option{
+  background:#050a18;
+  color:white;
+}
+
+/* subtle glow on focus */
+#eventSelect:focus{
+  outline:none;
+  border-color: rgba(0,140,255,.55);
+  box-shadow: 0 0 12px rgba(0,120,255,.35);
+}
+.soundBtn{
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  color: rgba(255,255,255,.85);
+  padding:8px 10px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:800;
+  font-size:12px;
+}
+
+.soundBtn:hover{ background: rgba(255,255,255,.06); }
+.soundBtn.on{
+  border-color: rgba(0,140,255,.45);
+  box-shadow: 0 0 12px rgba(0,120,255,.25);
+}
+.feedbackWrap{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.30);
+  border-radius:16px;
+  padding:12px;
+}
+
+#fbText{
+  width:100%;
+  resize: vertical;
+  min-height: 110px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.55);
+  color: rgba(255,255,255,.92);
+  font-size:14px;
+}
+
+#fbName{
+  flex:1;
+  min-width: 160px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.55);
+  color: rgba(255,255,255,.92);
+}
+
+.feedbackRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:10px;
 }
