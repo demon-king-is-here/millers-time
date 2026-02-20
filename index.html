@@ -30,6 +30,7 @@
       <span class="dot"></span>
       <span>LIVE DILATION</span>
     </div>
+    <button class="soundBtn" id="soundBtn" type="button">🔇 Sound</button>
   </header>
 
   <main class="layout">
@@ -121,7 +122,7 @@
       </div>
 
       <div class="simRow">
-        <input id="simHours" type="range" min="0" max="6" step="0.05" value="0" />
+        <input id="simHours" type="range" min="0" max="24" step="0.05" value="0" />
         <div class="chip"><span id="simOut">0.00</span> hr</div>
       </div>
 
@@ -133,7 +134,7 @@
         </div>
       </div>
     </section>
-    
+
 <section class="card" id="birthday">
   <div class="cardHead">
     <div>
@@ -169,6 +170,67 @@
   </div>
 </section>
 
+<section class="card" id="timelineFun">
+  <div class="cardHead">
+    <div>
+      <h2>Earth Timeline Zoom 🚀</h2>
+      <p>Pick an event. Then watch Earth years zoom by while Miller minutes tick.</p>
+    </div>
+    <div class="pill mono">kid-mode</div>
+  </div>
+
+  <div class="funGrid">
+    <div class="funBlock">
+      <div class="label">Choose an Earth event</div>
+      <div class="funRow">
+        <select id="eventSelect"></select>
+        <button class="btn ghost" id="jumpNow">Jump to “Now”</button>
+      </div>
+
+      <div class="miniStats">
+        <div class="mini">
+          <div class="k">Earth time since event</div>
+          <div class="v mono" id="sinceEarth">—</div>
+        </div>
+        <div class="mini">
+          <div class="k">That equals on Miller</div>
+          <div class="v mono" id="sinceMiller">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="funBlock">
+      <div class="label">Earth years flying by</div>
+
+      <div class="playRow">
+        <button class="btn primary" id="playFly">▶ Play</button>
+        <button class="btn ghost" id="stopFly">⏹ Stop</button>
+
+        <div class="chip"><span id="flyMins">10</span> Miller min</div>
+      </div>
+
+      <input id="flySlider" type="range" min="1" max="120" value="10" />
+      <p class="hint muted" style="margin:10px 0 0">
+        This sim shows <b>Earth calendar years</b> racing forward while only minutes pass on Miller’s planet.
+      </p>
+
+      <div class="flyStage">
+        <div class="yearCard">
+          <div class="yearLabel">EARTH YEAR</div>
+          <div class="yearBig mono" id="yearBig">—</div>
+          <div class="yearSub mono" id="yearSub">—</div>
+        </div>
+
+        <div class="meter">
+          <div class="meterFill" id="meterFill"></div>
+        </div>
+
+        <div class="caption" id="flyCaption">Pick an event + press Play 🚀</div>
+      </div>
+    </div>
+  </div>
+</section>
+
     <!-- ABOUT -->
     <section class="card" id="about">
       <div class="cardHead">
@@ -194,6 +256,27 @@
         </div>
       </div>
     </section>
+
+<section class="card" id="feedback">
+  <div class="cardHead">
+    <div>
+      <h2>Suggest upgrades 💡</h2>
+      <p>Tell us what to add next. If you’re a bot or a menace, the void will eat your message.</p>
+    </div>
+    <div class="pill mono">feedback</div>
+  </div>
+
+  <div class="feedbackWrap">
+    <textarea id="fbText" rows="4" placeholder="Type your idea… (features, animations, events, anything)"></textarea>
+
+    <div class="feedbackRow">
+      <input id="fbName" placeholder="Name (optional)" />
+      <button class="btn primary" id="fbSend" type="button">Send</button>
+    </div>
+
+    <div class="muted" id="fbMsg" style="margin-top:10px"></div>
+  </div>
+</section>
 
     <footer class="footer">
       <div class="mono">MILLER / EARTH • DILATION CONSOLE</div>
