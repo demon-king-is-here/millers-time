@@ -1,4 +1,29 @@
 const $ = (id) => document.getElementById(id);
+// ===============================
+// Firebase (Feedback Storage)
+// ===============================
+// Paste your config here from Firebase -> Project settings -> Your apps -> Web app
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCMNPUwMaKYx-2yePgZYbaOoomOgPzvQIE",
+  authDomain: "regret-index.firebaseapp.com",
+  projectId: "regret-index",
+  storageBucket: "regret-index.firebasestorage.app",
+  messagingSenderId: "1045622308120",
+  appId: "1:1045622308120:web:df0f58cf21fe942a2a726d",
+};
+
+let db = null;
+
+try {
+  if (window.firebase && FIREBASE_CONFIG.projectId) {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+    firebase.auth().signInAnonymously().catch(console.warn);
+  }
+} catch (e) {
+  console.warn("Firebase init failed:", e);
+  db = null;
+}
 
 // --- Safe "Interstellar-ish" ticking (Web Audio) ---
 let audioCtx = null;
@@ -572,6 +597,78 @@ function stopFly(){
   }
   $("meterFill").style.width = "0%";
   setTickIntensityFromDilation(1);
+}
+
+function looksLikeSpamOrVulgar(text){
+  const t = (text || "").toLowerCase();
+
+  const links = (t.match(/https?:\/\/|www\./g) || []).length;
+  if (links >= 2) return true;
+
+  if (/(.)\1\1\1\1/.test(t)) return true;
+
+  const spamWords = ["crypto","forex","airdrop","telegram","whatsapp","free money","click here","buy now","casino"];
+  if (spamWords.some(w => t.includes(w))) return true;
+
+  const bad = ["fuck","shit","bitch","asshole","cunt","whore","slut","nigger","faggot","retard"];
+  if (bad.some(w => t.includes(w))) return true;
+
+  return false;
+}
+
+function safeTrim(text, maxLen){
+  const s = (text || "").trim();
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
+async function sendFeedback(){
+  const msg = $("fbMsg");
+  const textRaw = $("fbText")?.value || "";
+  const nameRaw = $("fbName")?.value || "";
+
+  const text = safeTrim(textRaw, 800);
+  const name = safeTrim(nameRaw, 40);
+
+  if (!text){
+    if (msg) msg.textContent = "Type something first 🙂";
+    return;
+  }
+
+  if (looksLikeSpamOrVulgar(text)){
+    if (msg) msg.textContent = "That got swallowed by the spam black hole 🕳️ Try again.";
+    $("fbText").value = "";
+    return;
+  }
+
+  if (!db){
+    if (msg) msg.textContent = "Feedback storage isn’t connected (Firebase missing).";
+    return;
+  }
+
+  if (msg) msg.textContent = "Sending…";
+
+  // anonymous id for basic abuse control later
+  const anonId = (localStorage.getItem("anonId") || (() => {
+    const id = "u_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+    localStorage.setItem("anonId", id);
+    return id;
+  })());
+
+  try{
+    await db.collection("feedback").add({
+      text,
+      name: name || null,
+      anonId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    $("fbText").value = "";
+    $("fbName").value = "";
+    if (msg) msg.textContent = "Sent ✅ If we ship it, you basically helped build it.";
+  } catch(e){
+    console.warn(e);
+    if (msg) msg.textContent = "Failed to send (check Firestore rules).";
+  }
 }
 
 function init(){
